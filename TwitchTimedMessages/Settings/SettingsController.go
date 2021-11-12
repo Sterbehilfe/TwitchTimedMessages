@@ -2,7 +2,6 @@ package settings
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
@@ -16,11 +15,11 @@ func LoadSettings() Settings {
 	var settings Settings
 	content, err := os.ReadFile("./Settings.json")
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	err = json.Unmarshal(content, &settings)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	return settings
 }
