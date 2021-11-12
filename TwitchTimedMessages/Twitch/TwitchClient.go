@@ -12,14 +12,14 @@ import (
 type TwitchClient struct {
 	_settings  settings.Settings
 	_ircClient *irc.Client
-	_timers    []time.Timer
+	_timers    []*time.Timer
 }
 
 func NewTwitchClient(settings settings.Settings) *TwitchClient {
 	return &TwitchClient{
 		_settings:  settings,
 		_ircClient: irc.NewClient(settings.Username, settings.OAuthToken),
-		_timers:    make([]time.Timer, len(settings.Messages)),
+		_timers:    make([]*time.Timer, len(settings.Messages)),
 	}
 }
 
@@ -55,4 +55,10 @@ func (client *TwitchClient) SetEvents() {
 	client._ircClient.OnConnect(func() {
 		fmt.Println("Connected")
 	})
+}
+
+func (client *TwitchClient) CreateTimers() {
+	for i, m := range client._settings.Messages {
+		client._timers[i] = time.NewTimer(time.Duration(m.Interval))
+	}
 }
