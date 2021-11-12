@@ -1,2 +1,2 @@
 # CookieFarmer
-To farme cookies for ThePositiveBot
+To farm cookies for ThePositiveBot
