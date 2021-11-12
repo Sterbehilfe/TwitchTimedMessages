@@ -32,6 +32,11 @@ func (client *TwitchClient) Initialize() {
 	}
 }
 
+func (client *TwitchClient) Send(message settings.Message) {
+	client._ircClient.Say(message.Channel, message.Content)
+	fmt.Println("Send message to " + message.Channel + ": " + message.Content)
+}
+
 func (client *TwitchClient) GetChannels() []string {
 	var result []string
 	linq.From(client._settings).SelectT(func(m settings.Message) string {
