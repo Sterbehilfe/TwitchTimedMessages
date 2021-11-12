@@ -1,0 +1,11 @@
+{
+    "Username": "",
+    "OAuthToken": "",
+    "Messages": [
+        {
+            "Content": "",
+            "Channel": "",
+            "Interval": 60000
+        }
+    ]
+}
