@@ -12,14 +12,14 @@ import (
 type TwitchClient struct {
 	_settings  settings.Settings
 	_ircClient *irc.Client
-	_timers    []*time.Timer
+	_timers    []*time.Ticker
 }
 
 func NewTwitchClient(settings settings.Settings) *TwitchClient {
 	return &TwitchClient{
 		_settings:  settings,
 		_ircClient: irc.NewClient(settings.Username, settings.OAuthToken),
-		_timers:    make([]*time.Timer, len(settings.Messages)),
+		_timers:    make([]*time.Ticker, len(settings.Messages)),
 	}
 }
 
@@ -30,16 +30,17 @@ func (client *TwitchClient) Initialize() {
 	if err != nil {
 		panic(err)
 	}
+	client.CreateTimers()
 }
 
 func (client *TwitchClient) Send(message settings.Message) {
 	client._ircClient.Say(message.Channel, message.Content)
-	fmt.Println("Send message to " + message.Channel + ": " + message.Content)
+	fmt.Println("Sent message to", message.Channel+":", message.Content)
 }
 
 func (client *TwitchClient) GetChannels() []string {
 	var result []string
-	linq.From(client._settings).SelectT(func(m settings.Message) string {
+	linq.From(client._settings.Messages).SelectT(func(m settings.Message) string {
 		return m.Channel
 	}).Distinct().ToSlice(&result)
 	return result
@@ -48,6 +49,7 @@ func (client *TwitchClient) GetChannels() []string {
 func (client *TwitchClient) JoinChannels() {
 	for _, channel := range client.GetChannels() {
 		client._ircClient.Join(channel)
+		fmt.Println("Joined channel #" + channel)
 	}
 }
 
@@ -58,7 +60,7 @@ func (client *TwitchClient) SetEvents() {
 }
 
 func (client *TwitchClient) CreateTimers() {
-	for i, m := range client._settings.Messages {
-		client._timers[i] = time.NewTimer(time.Duration(m.Interval))
+	for _, m := range client._settings.Messages {
+		ticker := time.NewTicker(time.Duration(m.Interval) * time.Millisecond)
 	}
 }
