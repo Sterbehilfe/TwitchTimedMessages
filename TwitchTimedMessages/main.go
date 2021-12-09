@@ -11,4 +11,9 @@ func main() {
 	settings := settings.LoadSettings()
 	twitchClient := twitch.NewTwitchClient(settings)
 	twitchClient.Initialize()
+
+	for {
+		var input string
+		fmt.Scan(&input)
+	}
 }
