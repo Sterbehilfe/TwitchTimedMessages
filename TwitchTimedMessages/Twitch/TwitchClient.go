@@ -12,14 +12,12 @@ import (
 type TwitchClient struct {
 	_settings  settings.Settings
 	_ircClient *irc.Client
-	_timers    []*time.Ticker
 }
 
 func NewTwitchClient(settings settings.Settings) *TwitchClient {
 	return &TwitchClient{
 		_settings:  settings,
 		_ircClient: irc.NewClient(settings.Username, settings.OAuthToken),
-		_timers:    make([]*time.Ticker, len(settings.Messages)),
 	}
 }
 
