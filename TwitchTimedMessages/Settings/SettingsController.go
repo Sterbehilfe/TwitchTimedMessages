@@ -2,6 +2,7 @@ package settings
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -21,5 +22,6 @@ func LoadSettings() Settings {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("Loaded settings")
 	return settings
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	fmt.Println("TwitchTimedMessages started...")
+	fmt.Println("TwitchTimedMessages started")
 	settings := settings.LoadSettings()
 	twitchClient := twitch.NewTwitchClient(settings)
 	twitchClient.Initialize()
