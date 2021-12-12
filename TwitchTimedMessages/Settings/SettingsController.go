@@ -1,8 +1,8 @@
 package settings
 
 import (
+	console "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Console"
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
@@ -22,6 +22,6 @@ func LoadSettings() Settings {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Loaded settings")
+	console.WriteLine("Loaded settings")
 	return settings
 }

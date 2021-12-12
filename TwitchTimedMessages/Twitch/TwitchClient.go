@@ -1,11 +1,13 @@
 package twitch
 
 import (
+	console "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Console"
 	settings "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Settings"
 	"fmt"
 	"time"
 
 	linq "github.com/ahmetb/go-linq"
+	color "github.com/fatih/color"
 	irc "github.com/gempir/go-twitch-irc/v2"
 )
 
@@ -32,7 +34,7 @@ func (client *TwitchClient) Initialize() {
 
 func (client *TwitchClient) Send(message settings.Message) {
 	client._ircClient.Say(message.Channel, message.Content)
-	fmt.Println("Sent message to", message.Channel+":", message.Content)
+	console.WriteLine("Sent message to <#" + message.Channel + ">: " + message.Content)
 }
 
 func (client *TwitchClient) GetChannels() []string {
@@ -46,13 +48,13 @@ func (client *TwitchClient) GetChannels() []string {
 func (client *TwitchClient) JoinChannels() {
 	for _, channel := range client.GetChannels() {
 		client._ircClient.Join(channel)
-		fmt.Println("Joined channel #" + channel)
+		console.WriteLine("Joined channel <#" + channel + ">")
 	}
 }
 
 func (client *TwitchClient) SetEvents() {
 	client._ircClient.OnConnect(func() {
-		fmt.Println("Connected")
+		console.WriteLine("Client connected")
 	})
 }
 
@@ -75,7 +77,7 @@ func (client *TwitchClient) CheckMessagesForRateLimiting() {
 		return m.Interval < 1300
 	}).ToSlice(&intervalTooSmall)
 	for _, m := range intervalTooSmall {
-		fmt.Println("[WARNING] Interval for", m.Channel+":", `"`+m.Content+`"`, "too small.")
+		color.Red("[WARNING] Interval for", m.Channel+":", `"`+m.Content+`"`, "too small.")
 	}
 	if len(intervalTooSmall) > 0 {
 		fmt.Println("The interval shouldn't be smaller than 1300ms")
@@ -85,7 +87,7 @@ func (client *TwitchClient) CheckMessagesForRateLimiting() {
 		return len(m.Content) > 500
 	}).ToSlice(&messageTooLong)
 	for _, m := range messageTooLong {
-		fmt.Println("[WARNING] Message for", m.Channel+":", `"`+m.Content+`"`, "too long.")
+		color.Red("[WARNING] Message for", m.Channel+":", `"`+m.Content+`"`, "too long.")
 	}
 	if len(messageTooLong) > 0 {
 		fmt.Println("The length of the message can't exceed 500 chars")
