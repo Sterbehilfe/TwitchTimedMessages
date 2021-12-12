@@ -59,15 +59,17 @@ func (client *TwitchClient) SetEvents() {
 }
 
 func (client *TwitchClient) CreateTimers() {
-	for _, m := range client._settings.Messages {
-		ticker := time.NewTicker(time.Duration(m.Interval) * time.Millisecond)
-		go func(m settings.Message) {
-			client.Send(m)
-			for {
-				<-ticker.C
-				client.Send(m)
-			}
-		}(m)
+	for _, msg := range client._settings.Messages {
+		ticker := time.NewTicker(time.Duration(msg.Interval) * time.Millisecond)
+		go client.WaitForTick(ticker, msg)
+	}
+}
+
+func (client *TwitchClient) WaitForTick(ticker *time.Ticker, msg settings.Message) {
+	client.Send(msg)
+	for {
+		<-ticker.C
+		client.Send(msg)
 	}
 }
 
