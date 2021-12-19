@@ -1,11 +1,11 @@
 {
-    "Username": "",
-    "OAuthToken": "",
-    "Messages": [
-        {
-            "Content": "",
-            "Channel": "",
-            "Interval": 60000
-        }
-    ]
+  "Username": "",
+  "OAuthToken": "",
+  "Messages": [
+    {
+      "Content": "",
+      "Channel": "",
+      "Interval": 60000
+    }
+  ]
 }
