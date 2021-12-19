@@ -10,7 +10,7 @@ This program lets you send Twitch messages in intervals.
   ./build.sh
   ```
 - You can now find an executable and a JSON file in the "Build" folder.
-- Now insert your twitch username and your OAuth token into it and define messages you would like to send. The interval's unit is milliseconds. Like the following:
+- Now insert your twitch username and your OAuth token into it and define messages you would like to send. The interval's unit is milliseconds. Which should look like the following:
   
   ```json
   {
