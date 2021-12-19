@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	console "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Console"
+	console "TwitchTimedMessages/Console"
 )
 
 type Settings struct {

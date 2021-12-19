@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	console "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Console"
-	settings "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Settings"
+	console "TwitchTimedMessages/Console"
+	settings "TwitchTimedMessages/Settings"
 
 	linq "github.com/ahmetb/go-linq"
 	color "github.com/fatih/color"

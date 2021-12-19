@@ -1,4 +1,4 @@
-module github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages
+module TwitchTimedMessages
 
 go 1.17
 
