@@ -30,4 +30,4 @@ This program lets you send Twitch messages in intervals.
     ]
   } 
   ```
-- Start the executable file.
+- You can now start the executable file.
