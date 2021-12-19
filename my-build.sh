@@ -1,4 +1,4 @@
-cd ./TwitchTimedMessages
+cd TwitchTimedMessages/
 go env -w GOOS=linux GOARCH=arm
 go build -o ../Build/linux/TwitchTimedMessages ./main.go
 go env -w GOOS=windows GOARCH=amd64
