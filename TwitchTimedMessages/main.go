@@ -1,10 +1,11 @@
 package main
 
 import (
-	console "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Console"
-	settings "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Settings"
-	twitch "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Twitch"
 	"fmt"
+
+	console "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Console"
+	settings "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Settings"
+	twitch "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Twitch"
 )
 
 func main() {

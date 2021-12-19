@@ -1,10 +1,11 @@
 package twitch
 
 import (
-	console "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Console"
-	settings "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Settings"
 	"fmt"
 	"time"
+
+	console "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Console"
+	settings "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Settings"
 
 	linq "github.com/ahmetb/go-linq"
 	color "github.com/fatih/color"

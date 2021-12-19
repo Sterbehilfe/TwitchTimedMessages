@@ -1,9 +1,10 @@
 package settings
 
 import (
-	console "Documents/Git/TwitchTimedMessages/TwitchTimedMessages/Console"
 	"encoding/json"
 	"os"
+
+	console "github.com/sterbehilfe/TwitchTimedMessages/TwitchTimedMessages/Console"
 )
 
 type Settings struct {
