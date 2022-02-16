@@ -5,6 +5,9 @@
 ## Build ##
 Build/
 
+## My build.sh ##
+my-build.sh
+
 ### DotnetCore ###
 # .NET Core build folders
 bin/

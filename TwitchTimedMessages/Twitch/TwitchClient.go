@@ -27,10 +27,22 @@ func NewTwitchClient(s settings.Settings) *TwitchClient {
 func (client *TwitchClient) Initialize() {
 	client.CheckMessagesForRateLimiting()
 	client.SetEvents()
-	client.JoinChannels()
-	go client.ircClient.Connect()
-	time.Sleep(time.Duration(5000) * time.Millisecond)
+
+	channels := client.GetChannels()
+
+	client.JoinChannels(channels)
+	go client.Connect()
+	secInNano := 1000000000
+	sleep := secInNano * len(channels)
+	time.Sleep(time.Duration(sleep))
 	client.CreateTimers()
+}
+
+func (client *TwitchClient) Connect() {
+	err := client.ircClient.Connect()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (client *TwitchClient) Send(message settings.Message) {
@@ -46,8 +58,8 @@ func (client *TwitchClient) GetChannels() []string {
 	return result
 }
 
-func (client *TwitchClient) JoinChannels() {
-	for _, channel := range client.GetChannels() {
+func (client *TwitchClient) JoinChannels(channels []string) {
+	for _, channel := range channels {
 		client.ircClient.Join(channel)
 		console.WriteLine("Joined channel <#" + channel + ">")
 	}
