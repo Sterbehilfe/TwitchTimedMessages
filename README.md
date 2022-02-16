@@ -4,7 +4,7 @@ This program lets you send Twitch messages in intervals.
 - You will need to have Go installed. You can get it here: [go.dev](https://go.dev/dl/)
 - Execute the following:
 
-  ```
+  ```sh
   git clone https://github.com/Sterbehilfe/TwitchTimedMessages.git
   cd TwitchTimedMessages/
   ./build.sh
