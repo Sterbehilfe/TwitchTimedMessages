@@ -2,6 +2,7 @@ package twitch
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	console "TwitchTimedMessages/Console"
@@ -12,81 +13,85 @@ import (
 	irc "github.com/gempir/go-twitch-irc/v2"
 )
 
-type TwitchClient struct {
+const (
+	SecInNano = 1000000000
+)
+
+type Client struct {
 	settings  settings.Settings
 	ircClient *irc.Client
 }
 
-func NewTwitchClient(s settings.Settings) *TwitchClient {
-	return &TwitchClient{
+func NewTwitchClient(s settings.Settings) *Client {
+	return &Client{
 		settings:  s,
 		ircClient: irc.NewClient(s.Username, s.OAuthToken),
 	}
 }
 
-func (client *TwitchClient) Initialize() {
-	client.CheckMessagesForRateLimiting()
-	client.SetEvents()
+func (client *Client) Initialize() {
+	client.checkMessagesForRateLimiting()
+	client.setEvents()
 
-	channels := client.GetChannels()
+	channels := client.getChannels()
 
-	client.JoinChannels(channels)
+	client.joinChannels(channels)
+	console.WriteLine("Connecting...")
 	go client.Connect()
-	secInNano := 1000000000
-	sleep := secInNano * len(channels)
+	sleep := SecInNano * len(channels)
 	time.Sleep(time.Duration(sleep))
-	client.CreateTimers()
+	console.WriteLine("Connected!")
+	client.createTimers()
 }
 
-func (client *TwitchClient) Connect() {
+func (client *Client) Connect() {
 	err := client.ircClient.Connect()
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (client *TwitchClient) Send(message settings.Message) {
-	client.ircClient.Say(message.Channel, message.Content)
-	console.WriteLine("Sent message to <#" + message.Channel + ">: " + message.Content)
+func (client *Client) Send(msg settings.Message) {
+	client.ircClient.Say(msg.Channel, msg.Content)
+	console.WriteLine("Sent message to <#" + msg.Channel + ">: " + msg.Content)
 }
 
-func (client *TwitchClient) GetChannels() []string {
+func (client *Client) getChannels() []string {
 	var result []string
 	linq.From(client.settings.Messages).SelectT(func(m settings.Message) string {
-		return m.Channel
+		return strings.ToLower(m.Channel)
 	}).Distinct().ToSlice(&result)
 	return result
 }
 
-func (client *TwitchClient) JoinChannels(channels []string) {
-	for _, channel := range channels {
-		client.ircClient.Join(channel)
-		console.WriteLine("Joined channel <#" + channel + ">")
+func (client *Client) joinChannels(channels []string) {
+	for _, c := range channels {
+		client.ircClient.Join(c)
+		console.WriteLine("Joined channel <#" + c + ">")
 	}
 }
 
-func (client *TwitchClient) SetEvents() {
+func (client *Client) setEvents() {
 	client.ircClient.OnConnect(func() {
 		console.WriteLine("Client connected")
 	})
 }
 
-func (client *TwitchClient) CreateTimers() {
+func (client *Client) createTimers() {
 	for _, msg := range client.settings.Messages {
 		ticker := time.NewTicker(time.Duration(msg.Interval) * time.Millisecond)
-		go client.WaitForTick(ticker, msg)
+		go client.waitForTick(ticker, msg)
 	}
 }
 
-func (client *TwitchClient) WaitForTick(ticker *time.Ticker, msg settings.Message) {
-	client.Send(msg)
+func (client *Client) waitForTick(ticker *time.Ticker, msg settings.Message) {
 	for {
-		<-ticker.C
 		client.Send(msg)
+		<-ticker.C
 	}
 }
 
-func (client *TwitchClient) CheckMessagesForRateLimiting() {
+func (client *Client) checkMessagesForRateLimiting() {
 	var intervalTooSmall []settings.Message
 	linq.From(client.settings.Messages).WhereT(func(m settings.Message) bool {
 		return m.Interval < 1300
